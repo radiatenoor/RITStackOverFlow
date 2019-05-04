@@ -9,9 +9,15 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Yajra\DataTables\Facades\DataTables;
 
 class QuestionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,6 +26,25 @@ class QuestionController extends Controller
     public function index()
     {
         $question = Question::where('user_id',Auth::user()->id)->get();
+        return view('front.question.list-datatable',compact('question'));
+    }
+
+    public function rawTable()
+    {
+        $customData=[];
+        $question = Question::where('user_id',Auth::user()->id)->get();
+        // foreach to customise the data
+        /*foreach ($question as $qst){
+            $customData[] = [
+                'qst_id'=>$qst->id,
+                'quest_title'=>$qst->title,
+                'category_name'=>$qst->category->name,
+                'quest_tags'=>$qst->tags,
+                'quest_status'=>$qst->status,
+                'date'=>$qst->created_at,
+                'help'=>'help me'
+            ];
+        }*/ // end customisation
         return view('front.question.list',compact('question'));
     }
 
@@ -112,5 +137,54 @@ class QuestionController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function questionData(){
+        $customData=[];
+        $question = Question::where('user_id',Auth::user()->id)
+            ->with('tags')
+            ->orderBy('id','DESC')
+            ->get();
+        foreach($question as $qst){
+            $tags=[];
+            foreach($qst->tags as $tag){
+                $tags[] =  $tag->name;
+            }
+            $customData[] = [
+                'id'=>$qst->id,
+                'title'=>$qst->title,
+                'category_name'=>$qst->category->name,
+                'quest_tags'=>$tags,
+                'status'=>$qst->status,
+                'date'=>''.$qst->created_at
+            ];
+        }
+        $data_table_render = DataTables::of($customData)
+            ->addColumn('hash',function ($row){
+                return '<input type="checkbox" id="qst_id_'.$row["id"].'">';
+            })
+            ->addColumn('action',function ($row){
+                return '<button class="btn btn-info btn-xs"><i class="fa fa-edit"></i></button>'.
+                    '<button class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>';
+            })
+            ->editColumn('status',function ($row){
+                $htmlElement = "";
+                if ($row['status']==1){
+                    $htmlElement = '<button class="btn btn-success btn-xs">Active</button>';
+                }else{
+                    $htmlElement = '<button class="btn btn-danger btn-xs">Inactive</button>';
+                }
+                return $htmlElement;
+            })
+            ->editColumn('quest_tags',function ($row){
+                $htmlElement = '';
+                foreach ($row['quest_tags'] as $tag){
+                    $htmlElement .= '<button class="btn btn-success btn-xs">'.$tag.'</button>';
+                }
+                return $htmlElement;
+            })
+            ->rawColumns(['hash','status','action','quest_tags'])
+            ->make(true);
+        return $data_table_render;
     }
 }

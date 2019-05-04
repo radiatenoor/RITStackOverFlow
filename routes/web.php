@@ -32,4 +32,6 @@ Route::post('/user/register','Auth\RegisterController@userRegister')->name('user
 Route::get('/new/question','User\QuestionController@create');
 Route::post('/store/question','User\QuestionController@store')
     ->name('store.question');
-Route::get('/question/list','User\QuestionController@index');
+Route::get('/question/list/datatable','User\QuestionController@index');
+Route::get('/question/datatable','User\QuestionController@questionData');
+Route::get('/question/list','User\QuestionController@rawTable');
