@@ -35,3 +35,4 @@ Route::post('/store/question','User\QuestionController@store')
 Route::get('/question/list/datatable','User\QuestionController@index');
 Route::get('/question/datatable','User\QuestionController@questionData');
 Route::get('/question/list','User\QuestionController@rawTable');
+Route::get('/top/question','User\QuestionController@topQuestion');

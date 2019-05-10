@@ -145,18 +145,18 @@ class QuestionController extends Controller
             ->with('tags')
             ->orderBy('id','DESC')
             ->get();
-        foreach($question as $qst){
+        foreach($question as $row){
             $tags=[];
-            foreach($qst->tags as $tag){
+            foreach($row->tags as $tag){
                 $tags[] =  $tag->name;
             }
             $customData[] = [
-                'id'=>$qst->id,
-                'title'=>$qst->title,
-                'category_name'=>$qst->category->name,
+                'id'=>$row->id,
+                'title'=>$row->title,
+                'category_name'=>$row->category->name,
                 'quest_tags'=>$tags,
-                'status'=>$qst->status,
-                'date'=>''.$qst->created_at
+                'status'=>$row->status,
+                'date'=>''.$row->created_at
             ];
         }
         $data_table_render = DataTables::of($customData)
@@ -186,5 +186,28 @@ class QuestionController extends Controller
             ->rawColumns(['hash','status','action','quest_tags'])
             ->make(true);
         return $data_table_render;
+    }
+
+    public function topQuestion(Request $request){
+        // get the Get parameter value of url
+        $option = $request->input('option');
+
+        $query = Question::orderBy('id','DESC');
+        if ($option=="today"){
+            $query->whereDate('created_at',date('Y-m-d'));
+        }elseif ($option=="week"){
+            $query->whereDate('created_at','>=','2019-05-01');
+            $query->whereDate('created_at','<=','2019-05-07');
+        }elseif ($option=="month"){
+            $query->whereDate('created_at','>=','2019-05-01');
+            $query->whereDate('created_at','<=','2019-05-31');
+        }
+
+        $questions = $query->paginate(5);
+
+        $questions->appends(['option'=>$option]);
+
+        return view('front.question.top-question')
+            ->with('questions',$questions);
     }
 }
