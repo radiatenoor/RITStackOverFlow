@@ -102,7 +102,10 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
-        //
+        $question = Question::where('user_id',Auth::user()->id)
+            ->where('id',$id)->first();
+       return view('front.question.show')
+           ->with('question',$question);
     }
 
     /**
@@ -193,18 +196,27 @@ class QuestionController extends Controller
         $option = $request->input('option');
 
         $query = Question::orderBy('id','DESC');
+
+        $today = date('Y-m-d');
+        /*here we conditionally add mysql where condition to a query object*/
         if ($option=="today"){
-            $query->whereDate('created_at',date('Y-m-d'));
+            $query ->whereDate('created_at',$today);
         }elseif ($option=="week"){
-            $query->whereDate('created_at','>=','2019-05-01');
-            $query->whereDate('created_at','<=','2019-05-07');
+            $week = new \DateTime($today);
+            $week->modify('-6 days');
+            $weekDate = $week->format('Y-m-d');
+            $query->whereDate('created_at','>=',$weekDate);
+            $query->whereDate('created_at','<=',$today);
         }elseif ($option=="month"){
-            $query->whereDate('created_at','>=','2019-05-01');
-            $query->whereDate('created_at','<=','2019-05-31');
+            $month = new \DateTime($today);
+            $month->modify('-30 days');
+            $monthDate = $month->format('Y-m-d');
+            $query->whereDate('created_at','>=',$monthDate);
+            $query->whereDate('created_at','<=',$today);
         }
 
         $questions = $query->paginate(5);
-
+        /* Used when your query is filter query and search query */
         $questions->appends(['option'=>$option]);
 
         return view('front.question.top-question')
