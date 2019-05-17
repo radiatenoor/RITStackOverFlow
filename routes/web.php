@@ -37,3 +37,7 @@ Route::get('/question/datatable','User\QuestionController@questionData');
 Route::get('/question/list','User\QuestionController@rawTable');
 Route::get('/top/question','User\QuestionController@topQuestion');
 Route::get('/show/question/{id}','User\QuestionController@show');
+Route::post('/store/answer/{id}','User\AnswerController@store')
+    ->name('store.answer');
+Route::post('/store/comment/{id}','User\AnswerController@storeComment')
+    ->name('store.comment');
