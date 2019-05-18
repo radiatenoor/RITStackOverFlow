@@ -46,7 +46,7 @@
                                         </button>
                                     </th>
                                     <th>
-                                        <label style="font-size: 20px">{{$row->title}}</label><br>
+                                        <a href="{{url('show/question/'.$row->id)}}" style="font-size: 20px">{{$row->title}}</a><br>
                                         @foreach($row->tags as $tag)
                                           <button class="btn btn-success btn-xs"><i class="fa fa-tags"></i> {{$tag->name}}</button>
                                         @endforeach

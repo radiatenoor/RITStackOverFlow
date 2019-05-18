@@ -57,7 +57,11 @@
                                         <div class="sender-info">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <span data-answer="#" class="sender-dropdown edit_answer" style="cursor: pointer"><i class="fa fa-edit"></i> Edit</span>
+                                                    @if(Auth::user()->id==$answer->user->id)
+                                                        <span nur-alam="{{$answer->answer}}" id="{{$answer->id}}" class="sender-dropdown edit_answer" style="cursor: pointer">
+                                                            <i class="fa fa-edit"></i> Edit
+                                                        </span>
+                                                    @endif
                                                     <span id="{{$answer->id}}" class="open_comment_box" data-toggle="modal" data-target=".comment_modal" style="cursor: pointer">
                                                         <i class="fa fa-comment"></i> Comment
                                                     </span>
@@ -234,6 +238,20 @@
                         $('#comment_form').submit();
                     }
                 });
+            });
+            $(".edit_answer").click(function () {
+                var id = $(this).attr('id');
+                var answer = $(this).attr('nur-alam');
+                // scroll code
+                $('html, body').animate({
+                    scrollTop: $(document).height()-$(window).height()
+                });
+                CKEDITOR.instances['answer'].setData(answer);
+                // change the value of the button
+                $("#post_answer").html('<i class="fa fa-save"></i> Update Answer');
+                // change the action
+                var url = "{{url('update/answer')}}";
+                $("#answer_form").attr('action',url+"/"+id);
             })
         })
     </script>

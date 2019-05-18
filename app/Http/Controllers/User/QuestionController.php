@@ -102,8 +102,7 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
-        $question = Question::where('user_id',Auth::user()->id)
-            ->where('id',$id)->first();
+        $question = Question::find($id);
        return view('front.question.show')
            ->with('question',$question);
     }

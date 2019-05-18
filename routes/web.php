@@ -39,5 +39,7 @@ Route::get('/top/question','User\QuestionController@topQuestion');
 Route::get('/show/question/{id}','User\QuestionController@show');
 Route::post('/store/answer/{id}','User\AnswerController@store')
     ->name('store.answer');
+Route::post('/update/answer/{id}','User\AnswerController@update')
+    ->name('update.answer');
 Route::post('/store/comment/{id}','User\AnswerController@storeComment')
     ->name('store.comment');

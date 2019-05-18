@@ -100,7 +100,16 @@ class AnswerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'answer'=>['required',new StripThenLength(6)]
+        ]);
+
+        $answer = Answer::find($id);
+        $answer->answer = $request->answer;
+        $answer->save();
+
+        Session::flash('success','Successfully Updated The Answer');
+        return redirect()->back();
     }
 
     /**
