@@ -1,7 +1,7 @@
 <div class="col-md-3 left_col">
     <div class="left_col scroll-view">
         <div class="navbar nav_title" style="border: 0;">
-            <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Admin Panel</span></a>
+            <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>User Panel</span></a>
         </div>
 
         <div class="clearfix"></div>
@@ -13,7 +13,8 @@
             </div>
             <div class="profile_info">
                 <span>Welcome,</span>
-                <h2>John Doe</h2>
+                <span>{{Auth::user()->name}}</span>
+                <h2>{{Auth::user()->email}}</h2>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -27,19 +28,13 @@
                 <h3>General</h3>
                 <ul class="nav side-menu">
                     <li><a href="{{ url('dashboard') }}"><i class="fa fa-home"></i> Dashboard</a></li>
-                    <li><a><i class="fa fa-home"></i> User <span class="fa fa-chevron-down"></span></a>
+                    <li><a><i class="fa fa-home"></i> Question <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="{{ url('user/create') }}">Create</a></li>
-                            <li><a href="{{ url('user/list') }}">List</a></li>
+                            <li><a href="{{ url('question/list/datatable') }}">List</a></li>
+                            <li><a href="{{ url('new/question') }}">New Entry</a></li>
                         </ul>
                     </li>
-                    <li><a><i class="fa fa-home"></i> Extra <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu">
-                            <li><a href="{{ url('user/create') }}">Category</a></li>
-                            <li><a href="{{ url('user/list') }}">Tags</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="{{ url('dashboard') }}"><i class="fa fa-home"></i> Top Question</a></li>
+                    <li><a href="{{ url('top/question') }}"><i class="fa fa-home"></i> Top Question</a></li>
                 </ul>
             </div>
         </div>

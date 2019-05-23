@@ -37,9 +37,15 @@ Route::get('/question/datatable','User\QuestionController@questionData');
 Route::get('/question/list','User\QuestionController@rawTable');
 Route::get('/top/question','User\QuestionController@topQuestion');
 Route::get('/show/question/{id}','User\QuestionController@show');
+Route::get('/view/question/{id}','User\QuestionController@view');
+Route::get('delete/question/{id}','User\QuestionController@deleteQuestion');
+Route::get('edit/question/{id}','User\QuestionController@edit');
+/*ANSWER Route*/
 Route::post('/store/answer/{id}','User\AnswerController@store')
     ->name('store.answer');
 Route::post('/update/answer/{id}','User\AnswerController@update')
     ->name('update.answer');
+/*Comment Route*/
 Route::post('/store/comment/{id}','User\AnswerController@storeComment')
     ->name('store.comment');
+Route::get('/delete/comment/{id}','User\AnswerController@deleteComment');

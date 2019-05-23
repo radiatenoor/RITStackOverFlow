@@ -122,4 +122,15 @@ class AnswerController extends Controller
     {
         //
     }
+
+    public function deleteComment($id){
+       $comment = Comment::where('user_id',Auth::user()->id)
+//           ->where('id',$id)->first()
+           ->find($id);
+       if ($comment){
+           $comment->delete();
+           return response()->json('success',201);
+       }
+       return response()->json('error',422);
+    }
 }

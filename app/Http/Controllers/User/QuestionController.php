@@ -115,7 +115,19 @@ class QuestionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $question = Question::where('user_id',Auth::user()->id)
+            ->where('id',$id)->first();
+        $tags = Tag::orderBy('name','ASC')->get();
+        $categories = Category::orderBy('name','ASC')->get();
+        $tag_array=[];
+        foreach ($question->tags as $tag){
+            $tag_array[] = $tag->id;
+        }
+        return view('front.question.edit')
+            ->with('question',$question)
+            ->with('categories',$categories)
+            ->with('tags',$tags)
+            ->with('tag_array',$tag_array);
     }
 
     /**
@@ -130,15 +142,12 @@ class QuestionController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    public function view($id){
+        $question = Question::where('user_id',Auth::id())
+//            ->where('id',$id)->first();
+              ->find($id);
+        return view('front.question.view')
+            ->with('question',$question);
     }
 
     public function questionData(){
@@ -166,8 +175,11 @@ class QuestionController extends Controller
                 return '<input type="checkbox" id="qst_id_'.$row["id"].'">';
             })
             ->addColumn('action',function ($row){
-                return '<button class="btn btn-info btn-xs"><i class="fa fa-edit"></i></button>'.
-                    '<button class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>';
+                $view_url = url('view/question/'.$row['id']);
+                $edit_url = url('edit/question/'.$row['id']);
+                return '<a href="'.$edit_url.'" class="btn btn-info btn-xs"><i class="fa fa-edit"></i></a>'.
+                    '<a href="'.$view_url.'" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>'.
+                    '<button onClick="deleteQuestion('.$row['id'].')" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>';
             })
             ->editColumn('status',function ($row){
                 $htmlElement = "";
@@ -220,5 +232,15 @@ class QuestionController extends Controller
 
         return view('front.question.top-question')
             ->with('questions',$questions);
+    }
+
+    public function deleteQuestion($id){
+        $question = Question::where('user_id',Auth::id())
+            ->find($id);
+        if($question){
+            $question->delete();
+            return response()->json('successful',201);
+        }
+        return response()->json('error',422);
     }
 }

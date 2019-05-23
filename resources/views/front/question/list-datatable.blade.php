@@ -54,5 +54,63 @@
             });
 
         });
+        function deleteQuestion(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function(result){
+                if (result.value) {
+                    // delet by ajax
+                    var url = "{{url('delete/question')}}";
+                    $.ajax({
+                        /*config part*/
+                        url:url+"/"+id,
+                        type:"GET",
+                        dataType:"json",
+                        /*Config part*/
+                        beforeSend:function () {
+                            Swal.fire({
+                                title: 'Deleting Data.......',
+                                html:"<i class='fa fa-spinner fa-spin' style='font-size: 24px'></i>",
+                                allowOutsideClick:false,
+                                showCancelButton: false,
+                                showConfirmButton: false
+                            });
+                        },
+                        success:function (sharukhkhan) {
+                            Swal.close();
+                            if(sharukhkhan==="successful"){
+                                Swal.fire({
+                                    title: 'Success',
+                                    text: "You Have Succefully Deleted The Question",
+                                    type: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(function(result){
+                                    if (result.value) {
+                                        window.location.reload();
+                                    }
+                                });
+                            }
+                            console.log(sharukhkhan);
+                        },
+                        error:function (error) {
+                            Swal.fire({
+                                title: 'Error',
+                                text:'Something Went Wrong',
+                                type:'error',
+                                showConfirmButton: true
+                            });
+                            console.log(error)
+                        }
+
+                    })
+                }
+            });
+        }
     </script>
 @endsection

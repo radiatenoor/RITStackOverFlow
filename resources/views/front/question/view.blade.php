@@ -20,10 +20,7 @@
                                 <div class="mail_heading row">
                                     <div class="col-md-8">
                                         <div class="btn-group">
-                                            <button class="btn btn-md btn-info" type="button">Total Vote <span class="badge badge-danger"></span></button>
-                                                <a href="" class="btn btn-md btn-default" type="button"><i class="fa fa-star-o"></i> Vote?</a>
-                                                <button class="btn btn-md btn-success" type="button"><i class="fa fa-star"></i> Voted</button>
-                                                <a href="" class="btn btn-md btn-danger" type="button"><i class="fa fa-exclamation-circle"></i> Cancel Vote</a>
+                                            <button class="btn btn-md btn-info" type="button">Total Vote <span class="badge badge-danger">23</span></button>
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-right">
@@ -299,5 +296,6 @@
                 });
            });
         });
+
     </script>
 @endsection

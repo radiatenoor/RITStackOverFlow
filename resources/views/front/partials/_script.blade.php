@@ -7,4 +7,6 @@
 
 <!-- Custom Theme Scripts -->
 <script src="{{ asset('js/admin/custom.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.11.1/dist/sweetalert2.js"></script>
+
 @yield('script')
