@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use Yajra\DataTables\Facades\DataTables;
 
 class AnswerController extends Controller
 {
@@ -132,5 +133,31 @@ class AnswerController extends Controller
            return response()->json('success',201);
        }
        return response()->json('error',422);
+    }
+
+    public function answeredList(){
+        return view('front.answer.list');
+    }
+
+    public function answeredDataTable(){
+        $answers = Answer::where('user_id',Auth::id())
+            ->with('question')
+            ->get();
+        $render_data_table = DataTables::of($answers)
+            ->addColumn('hash',function ($row){
+                return '<input type="checkbox" id="'.$row->id.'">';
+            })
+            ->addColumn('action',function ($row){
+                $view_url = url('show/question/'.$row->question->id);
+                return '<a href="'.$view_url.'" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>'.
+                    '<button onClick="deleteAnswer('.$row->id.')" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>';
+            })
+            ->editColumn('answer',function ($row){
+                return strip_tags($row->answer);
+            })
+            ->rawColumns(['hash','action','answer'])
+            ->make(true);
+
+        return $render_data_table;
     }
 }

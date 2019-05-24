@@ -40,11 +40,14 @@ Route::get('/show/question/{id}','User\QuestionController@show');
 Route::get('/view/question/{id}','User\QuestionController@view');
 Route::get('delete/question/{id}','User\QuestionController@deleteQuestion');
 Route::get('edit/question/{id}','User\QuestionController@edit');
+Route::post('update/question/{id}','User\QuestionController@update');
 /*ANSWER Route*/
 Route::post('/store/answer/{id}','User\AnswerController@store')
     ->name('store.answer');
 Route::post('/update/answer/{id}','User\AnswerController@update')
     ->name('update.answer');
+Route::get('/answered/list','User\AnswerController@answeredList');
+Route::get('/answered/datatable','User\AnswerController@answeredDataTable');
 /*Comment Route*/
 Route::post('/store/comment/{id}','User\AnswerController@storeComment')
     ->name('store.comment');

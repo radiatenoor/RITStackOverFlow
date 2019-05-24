@@ -139,7 +139,25 @@ class QuestionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //validate
+        $this->validate($request,[
+            'title'=>'required|min:6',
+            'category'=>'required',
+            'tag'=>'required|array|min:1',
+            'description'=>'required|min:10'
+        ]);
+
+        // 2. data update
+        $quest = Question::find($id);
+        $quest->title = $request->title;
+        $quest->category_id = $request->category;
+        $quest->description = $request->description;
+        $quest->save();
+
+        // data update in many to many relationship/link table
+        $quest->tags()->sync($request->tag);
+
+        return response()->json('success',201);
     }
 
     public function view($id){

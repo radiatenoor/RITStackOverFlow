@@ -17,7 +17,7 @@
                 </div>
                 <div class="x_content">
                     <br>
-                    <form id="question_form" action="{{ route('store.question') }}" method="post" class="form-horizontal form-label-left">
+                    <form id="question_form" action="" method="post" class="form-horizontal form-label-left">
                         @csrf
                         <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Title <span class="required">*</span>
@@ -65,8 +65,7 @@
                         <div class="ln_solid"></div>
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                <button class="btn btn-primary" type="reset">Reset</button>
-                                <button type="submit" class="btn btn-success">Submit</button>
+                                <button type="submit" class="btn btn-success">Update</button>
                             </div>
                         </div>
 
@@ -77,13 +76,67 @@
     </div>
 @endsection
 @section('script')
- <script src="{{ asset('js/admin/select2/dist/js/select2.js') }}"></script>
+    <script src="//cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
+    <script src="{{ asset('js/admin/select2/dist/js/select2.js') }}"></script>
  <script>
+     CKEDITOR.replace('description');
      $(function () {
         $("#tag").select2();
+        $('#question_form').submit(function (event) {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to update the question",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, update it!'
+            }).then(function(result) {
+                if (result.value) {
+                    var form = $("#question_form")[0];
+                    var formData = new FormData(form);
+                    var url = "{{url('update/question')}}"+"/"+"{{$question->id}}";
+                    $.ajax({
+                        url:url,
+                        type:"POST",
+                        data:formData,
+                        dataType:"json",
+                        contentType:false,
+                        processData:false,
+                        beforeSend:function () {
+                            Swal.fire({
+                                title: 'Updating Data.......',
+                                html:"<i class='fa fa-spinner fa-spin' style='font-size: 24px'></i>",
+                                allowOutsideClick:false,
+                                showCancelButton: false,
+                                showConfirmButton: false
+                            });
+                        },
+                        success:function (response) {
+                            Swal.close();
+                            if(response==="success") {
+                                Swal.fire({
+                                    title: 'Success',
+                                    text: "You Have Succefully Updated",
+                                    type: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(function(result){
+                                    if (result.value) {
+                                        window.location.reload();
+                                    }
+                                });
+                            }
+                            console.log(response);
+                        },
+                        error:function (error) {
+                            console.log(error);
+                        }
+                    });
+                }
+            });
+        })
      });
-//     $(document).ready(function() {
-//
-//     });
+     
  </script>
 @endsection
