@@ -35,6 +35,7 @@
                         </ul>
                     </li>
                     <li><a href="{{ url('top/question') }}"><i class="fa fa-home"></i> Top Question</a></li>
+                    <li><a href="{{ url('search/question') }}"><i class="fa fa-search"></i> Search Question</a></li>
                 </ul>
             </div>
         </div>

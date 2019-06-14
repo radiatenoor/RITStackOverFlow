@@ -113,6 +113,7 @@ class LoginController extends Controller
             }
 
             return redirect('/user/login')
+                ->withInput($request->only('email'))
                 ->withErrors($this->errors);
         }
         // If the login attempt was unsuccessful we will increment the number of attempts

@@ -15,14 +15,14 @@
                     @csrf
                     <h1>User Login</h1>
                     <div>
-                        <input type="text" class="form-control" placeholder="Email" name="email" required="" />
+                        <input type="text" class="form-control" placeholder="Email" name="email" required="" value="{{ old('email') }}"/>
                     </div>
                     <div>
                         <input type="password" class="form-control" placeholder="Password" name="password" required="" />
                     </div>
                     <div>
                         <button class="btn btn-default submit" type="submit">Log in</button>
-                        <a class="reset_pass" href="#">Lost your password?</a>
+                        <a class="reset_pass" href="{{ url('forgot/password') }}">Lost your password?</a>
                     </div>
 
                     <div class="clearfix"></div>

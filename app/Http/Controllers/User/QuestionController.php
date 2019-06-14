@@ -261,4 +261,20 @@ class QuestionController extends Controller
         }
         return response()->json('error',422);
     }
+
+    public function search(Request $request){
+
+        $searchValue = $request->search;
+        $questions=[];
+
+        if ($searchValue) {
+            $questions = Question::where('status', 1)
+                ->where('title','like','%'. $searchValue . '%')
+                ->paginate(3);
+            $questions->appends(['search'=>$searchValue]);
+        }
+
+        return view('front.question.search')
+            ->with('questions',$questions);
+    }
 }

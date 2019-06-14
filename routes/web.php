@@ -28,6 +28,15 @@ Route::post('/user/logout','Auth\LoginController@logout')->name('user.logout');
 Route::get('/user/registration','Auth\RegisterController@showRegistrationForm');
 Route::post('/user/register','Auth\RegisterController@userRegister')->name('user.register');
 
+/* Forgot Password Routes */
+Route::get('/forgot/password','Auth\ForgotPasswordController@showLinkRequestForm');
+Route::post('/send/rest/link','Auth\ForgotPasswordController@sendResetLinkEmail')
+->name('send.reset.link');
+Route::get('/password/reset/{token}','Auth\ResetPasswordController@showResetForm')
+    ->name('password.reset');
+Route::post('/password/reset','Auth\ResetPasswordController@reset')
+->name('password.request');
+
 /*Question Routes*/
 Route::get('/new/question','User\QuestionController@create');
 Route::post('/store/question','User\QuestionController@store')
@@ -41,6 +50,10 @@ Route::get('/view/question/{id}','User\QuestionController@view');
 Route::get('delete/question/{id}','User\QuestionController@deleteQuestion');
 Route::get('edit/question/{id}','User\QuestionController@edit');
 Route::post('update/question/{id}','User\QuestionController@update');
+Route::any('/search/question','User\QuestionController@search')
+    ->name('search.question');
+
+
 /*ANSWER Route*/
 Route::post('/store/answer/{id}','User\AnswerController@store')
     ->name('store.answer');

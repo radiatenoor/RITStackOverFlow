@@ -74,9 +74,11 @@
 @endsection
 @section('script')
  <script src="{{ asset('js/admin/select2/dist/js/select2.js') }}"></script>
+ <script src="//cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
  <script>
      $(function () {
         $("#tag").select2();
+        CKEDITOR.replace('description');
      });
 //     $(document).ready(function() {
 //
