@@ -80,12 +80,12 @@ class RegisterController extends Controller
 
     public function userRegister(Request $request){
          $this->validate($request,[
-             'name'=>'required|min:6',
-             'email'=>'required|email|unique:users,email',
-             'password'=>'required|min:6',
-             'title'=>'required',
-             'location'=>'required'
-         ]);
+            'name'=>'required|min:6',
+            'email'=>'required|email|unique:users,email',
+            'password'=>'required|min:6',
+            'title'=>'required',
+            'location'=>'required'
+        ]);
 
          // save data in database
          $user = new User();

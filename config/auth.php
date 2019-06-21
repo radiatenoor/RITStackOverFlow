@@ -41,6 +41,11 @@ return [
             'provider' => 'users',
         ],
 
+        'system_admin' => [
+            'driver' => 'session',
+            'provider' => 'system_admins',
+        ],
+
         'api' => [
             'driver' => 'token',
             'provider' => 'users',
@@ -68,6 +73,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+
+        'system_admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Admin::class,
         ],
 
         // 'users' => [

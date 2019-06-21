@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\MessageBag;
 
 class LoginController extends Controller
@@ -37,7 +40,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except('logout','profile','updateProfile','updatePassword');
     }
 
     // override
@@ -154,4 +157,48 @@ class LoginController extends Controller
 //            'password'=>$request->password
 //        ];
 //    }
+
+   public function profile(){
+       return view('front.profile.profile');
+   }
+
+   public function updateProfile(Request $request){
+       $this->validate($request,[
+           'name'=>'required|min:6',
+           'email'=>'required|email|unique:users,email,'.Auth::id(),
+           'title'=>'required',
+           'location'=>'required'
+       ]);
+
+       $user = User::find(Auth::id());
+       $user->name = $request->name;
+       $user->email = $request->email;
+       $user->title = $request->title;
+       $user->location = $request->location;
+       // file upload
+       if ($request->hasFile('photo')){
+           $photo = $request->file('photo');
+           $filename = time().".".$photo->getClientOriginalExtension();
+           $destination_path = public_path('images');
+           $photo->move($destination_path,$filename);
+           $user->photo = $filename;
+       }
+       $user->save();
+
+       Session::flash('success','Successfully Profile Updated');
+       return redirect()->back();
+   }
+
+   public function updatePassword(Request $request){
+       $this->validate($request,[
+           'password'=>'required|string|confirmed|min:6|regex:/[a-z]/|regex:/[A-Z]/|regex:/[0-9]/|regex:/[@$!%*#?&]/'
+       ]);
+
+       $user = User::find(Auth::id());
+       $user->password = Hash::make($request->password);
+       $user->save();
+
+       Session::flash('success','You Have Successfully Changed Password');
+       return redirect()->back();
+   }
 }

@@ -7,11 +7,11 @@ use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('auth');
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -19,8 +19,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('front.dashboard.dashboard');
+        return view('admin.dashboard.dashboard');
     }
+
+
 
     /**
      * Show the form for creating a new resource.

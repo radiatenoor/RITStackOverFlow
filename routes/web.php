@@ -15,10 +15,7 @@ Route::get("/show/my/page",function (){
 });
 /*group middleware*/
 /*Route::group(['middleware'=>'auth'],function (){*/
-    Route::get('/dashboard','Admin\HomeController@index')/*->middleware('auth')*/;
-    Route::get('/user/list','Admin\UserController@index')/*->middleware('auth')*/;
-    Route::get('/user/create','Admin\UserController@create') /*->middleware('auth')*/;
-    Route::get('/user/edit','Admin\UserController@edit')/*->middleware('auth')*/;
+    Route::get('/dashboard','User\HomeController@index')/*->middleware('auth')*/;
 /*});*/
 /* Login Route */
 Route::get('/user/login','Auth\LoginController@showLoginForm');
@@ -27,7 +24,11 @@ Route::post('/user/logout','Auth\LoginController@logout')->name('user.logout');
 /* Registration Route */
 Route::get('/user/registration','Auth\RegisterController@showRegistrationForm');
 Route::post('/user/register','Auth\RegisterController@userRegister')->name('user.register');
-
+Route::get('/user/profile','Auth\LoginController@profile');
+Route::post('/update/user/profile','Auth\LoginController@updateProfile')
+    ->name('update.profile');
+Route::post('/update/user/password','Auth\LoginController@updatePassword')
+    ->name('update.password');
 /* Forgot Password Routes */
 Route::get('/forgot/password','Auth\ForgotPasswordController@showLinkRequestForm');
 Route::post('/send/rest/link','Auth\ForgotPasswordController@sendResetLinkEmail')
@@ -65,3 +66,9 @@ Route::get('/answered/datatable','User\AnswerController@answeredDataTable');
 Route::post('/store/comment/{id}','User\AnswerController@storeComment')
     ->name('store.comment');
 Route::get('/delete/comment/{id}','User\AnswerController@deleteComment');
+
+
+// Admin Side
+Route::get('/admin/dashboard','Admin\HomeController@index');
+Route::get('/admin/login','Auth\AdminLoginController@showLoginForm');
+Route::post('/admin/login','Auth\AdminLoginController@')->name('admin.login');

@@ -164,6 +164,7 @@ class QuestionController extends Controller
         $question = Question::where('user_id',Auth::id())
 //            ->where('id',$id)->first();
               ->find($id);
+
         return view('front.question.view')
             ->with('question',$question);
     }
