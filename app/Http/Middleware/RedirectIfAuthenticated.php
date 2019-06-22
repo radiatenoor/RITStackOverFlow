@@ -17,8 +17,12 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)->check()) {
-            return redirect('/dashboard');
+
+        if ($guard=="system_admin" && Auth::guard($guard)->check()) {
+            return redirect('/admin/dashboard');// user dashboard
+        }
+        if(Auth::guard($guard)->check()){
+            return redirect('/dashboard');// user dashboard
         }
 
         return $next($request);

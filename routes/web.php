@@ -71,4 +71,16 @@ Route::get('/delete/comment/{id}','User\AnswerController@deleteComment');
 // Admin Side
 Route::get('/admin/dashboard','Admin\HomeController@index');
 Route::get('/admin/login','Auth\AdminLoginController@showLoginForm');
-Route::post('/admin/login','Auth\AdminLoginController@')->name('admin.login');
+Route::post('/admin/login','Auth\AdminLoginController@login')
+    ->name('admin.login');
+Route::post('/admin/logout','Auth\AdminLoginController@logout')
+    ->name('admin.logout');
+
+Route::get('/new/system/user','Admin\SystemUserController@create');
+Route::post('/store/new/system/user','Admin\SystemUserController@store')
+    ->name('store.system.user');
+Route::get('/system/user/list','Admin\SystemUserController@index');
+Route::get('/edit/system/user/{id}','Admin\SystemUserController@edit')
+->name('edit.system.user');
+Route::post('/update/system/user/{id}','Admin\SystemUserController@update')
+    ->name('update.system.user');

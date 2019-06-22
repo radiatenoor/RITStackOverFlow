@@ -1,4 +1,11 @@
 @extends('admin.master')
+@section('page_title')
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Admin Dashboard</h3>
+        </div>
+    </div>
+@endsection
 @section('container')
     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
         <div class="tile-stats">

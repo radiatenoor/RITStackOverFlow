@@ -11,6 +11,13 @@ class AdminLoginController extends Controller
 {
     use AuthenticatesUsers;
 
+    public function __construct()
+    {
+        $this->middleware('guest:system_admin')->except('logout');
+    }
+
+    private $errors= [];
+
     protected $redirectTo = '/admin/dashboard';
 
     /**
@@ -45,12 +52,11 @@ class AdminLoginController extends Controller
 
             return $this->sendLockoutResponse($request);
         }
-        $auth=Auth::guard()->attempt($this->credentials($request));
+        $auth=$this->guard()->attempt($this->credentials($request));
         if ($auth){
 
-            $user = Auth::guard()->getLastAttempted();
+            $user = $this->guard()->getLastAttempted();
             $active=false;
-            $title =false;
             /*Activation Check*/
             if ($user->active==1){
                 $active=true;
@@ -86,5 +92,21 @@ class AdminLoginController extends Controller
     protected function guard()
     {
         return Auth::guard('system_admin');
+    }
+
+    /**
+     * Override
+     * Log the user out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        return $this->loggedOut($request) ?: redirect('/admin/login');
     }
 }

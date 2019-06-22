@@ -9,11 +9,12 @@
     <div class="login_wrapper">
         <div class="animate form login_form">
             <section class="login_content">
+                @include('admin.partials._message')
                 <form action="{{ route('admin.login') }}" method="post">
                     @csrf
                     <h1>Admin Login</h1>
                     <div>
-                        <input type="text" name="email" class="form-control" placeholder="Username" required="" />
+                        <input type="text" name="email" class="form-control" value="{{ old('email') }}" placeholder="Username" required="" />
                     </div>
                     <div>
                         <input type="password" name="password" class="form-control" placeholder="Password" required="" />
