@@ -17,4 +17,6 @@
 
 <!-- Custom Theme Style -->
 <link href="{{ asset('css/admin/custom.min.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@8.11.1/dist/sweetalert2.min.css">
+
 @yield('stylesheets')

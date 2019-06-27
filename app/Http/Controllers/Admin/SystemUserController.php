@@ -136,6 +136,11 @@ class SystemUserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $admin = Admin::find($id);
+        if ($admin && $admin->role != 'master-admin'){
+            $admin->delete();
+            return response()->json('successful',201);
+        }
+        return response()->json('error',422);
     }
 }

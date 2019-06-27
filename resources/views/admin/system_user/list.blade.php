@@ -46,7 +46,7 @@
                              <td>{{ $row->created_at }}</td>
                              <td>
                                  <a href="{{ route('edit.system.user',$row->id) }}" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View</a>
-                                 <button class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete</button>
+                                 <button id="{{ $row->id }}" class="btn btn-danger btn-xs delete_system_user"><i class="fa fa-trash-o"></i> Delete</button>
                              </td>
                            </tr>
                        @endforeach
@@ -55,4 +55,67 @@
             </div>
         </div>
     </div>
+@endsection
+@section('script')
+ <script>
+     $('.delete_system_user').click(function () {
+         var id = $(this).attr('id');
+         Swal.fire({
+             title: 'Are you sure?',
+             text: "You won't be able to revert this!",
+             type: 'warning',
+             showCancelButton: true,
+             confirmButtonColor: '#3085d6',
+             cancelButtonColor: '#d33',
+             confirmButtonText: 'Yes, delete it!'
+         }).then(function(result){
+             if (result.value) {
+                 // delet by ajax
+                 var url = "{{url('delete/system/user')}}";
+                 $.ajax({
+                     /*config part*/
+                     url:url+"/"+id,
+                     type:"GET",
+                     dataType:"json",
+                     /*Config part*/
+                     beforeSend:function () {
+                         Swal.fire({
+                             title: 'Deleting Data.......',
+                             html:"<i class='fa fa-spinner fa-spin' style='font-size: 24px'></i>",
+                             allowOutsideClick:false,
+                             showCancelButton: false,
+                             showConfirmButton: false
+                         });
+                     },
+                     success:function (response) {
+                         Swal.close();
+                         if(response==="successful"){
+                             Swal.fire({
+                                 title: 'Success',
+                                 text: "You Have Succefully Deleted The System User",
+                                 type: 'success',
+                                 confirmButtonText: 'OK'
+                             }).then(function(result){
+                                 if (result.value) {
+                                     window.location.reload();
+                                 }
+                             });
+                         }
+                         console.log(response);
+                     },
+                     error:function (error) {
+                         Swal.fire({
+                             title: 'Error',
+                             text:'Something Went Wrong',
+                             type:'error',
+                             showConfirmButton: true
+                         });
+                         console.log(error)
+                     }
+
+                 })
+             }
+         });
+     });
+ </script>
 @endsection
