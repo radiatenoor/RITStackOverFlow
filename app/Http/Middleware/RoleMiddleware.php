@@ -14,11 +14,13 @@ class RoleMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next,$role)
+    public function handle($request, Closure $next,$roles)
     {
+        $user_roles = explode('|',$roles);
+        $existRole = in_array(Auth::guard('system_admin')->user()->role,$user_roles);
         //auth('system_admin')->user()->role;
         //Auth::guard('system_admin')->user()->role;
-        if (Auth::guard('system_admin')->user()->role!==$role ){
+        if (!$existRole){
             return redirect('admin/dashboard');
         }
         return $next($request);

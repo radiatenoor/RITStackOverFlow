@@ -110,4 +110,23 @@ class PermissionController extends Controller
         Session::flash('success','Successfully Assigned');
         return redirect()->back();
     }
+
+    public function updatePermission(Request $request){
+        $this->validate($request,[
+            'show_edit_id'=>'required',
+            'edit_permissions'=>'required|array|min:1'
+        ]);
+
+        $admin = Admin::find($request->show_edit_id);
+        $admin->permissions()->sync($request->edit_permissions);
+
+        Session::flash('success','You Have Successfully Updated the permissions');
+        return redirect()->back();
+    }
+
+    public function deletePermission($id){
+        $admin = Admin::find($id);
+        $admin->permissions()->detach();
+        return response()->json('success',201);
+    }
 }

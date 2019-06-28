@@ -57,7 +57,14 @@
                     <div class="ln_solid"></div>
                     <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            <button type="submit" class="btn btn-success">Update</button>
+                            @php
+                                $auth_user_permissions = auth('system_admin')->user()->permissions
+                                   ->pluck('name')->toArray();
+                                $hasUpdatePermission = in_array('update',$auth_user_permissions);
+                            @endphp
+                            @if($hasUpdatePermission)
+                                <button type="submit" class="btn btn-success">Update</button>
+                            @endif
                         </div>
                     </div>
                 </form>

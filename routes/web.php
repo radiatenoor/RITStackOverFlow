@@ -77,18 +77,36 @@ Route::post('/admin/login','Auth\AdminLoginController@login')
 Route::post('/admin/logout','Auth\AdminLoginController@logout')
 	->name('admin.logout');
 
-Route::group(['middleware'=>['role:master-admin']],function (){
-    Route::get('/new/system/user','Admin\SystemUserController@create');
-    Route::post('/store/new/system/user','Admin\SystemUserController@store')
-        ->name('store.system.user');
-    Route::get('/system/user/list','Admin\SystemUserController@index');
-    Route::get('/edit/system/user/{id}','Admin\SystemUserController@edit')
-    ->name('edit.system.user');
-    Route::post('/update/system/user/{id}','Admin\SystemUserController@update')
-        ->name('update.system.user');
-    Route::get('/delete/system/user/{id}','Admin\SystemUserController@destroy');
+Route::group(['middleware'=>['role:editor|master-admin']],function (){
 
-    Route::get('/assign/permission','Admin\PermissionController@assign');
-    Route::post('/assign/permission','Admin\PermissionController@assignPermission')
-         ->name('assign.permission');
+    Route::get('/new/system/user','Admin\SystemUserController@create')
+        ->middleware('permission:add');
+    Route::post('/store/new/system/user','Admin\SystemUserController@store')
+        ->name('store.system.user')
+        ->middleware('permission:add');
+
+    Route::get('/system/user/list','Admin\SystemUserController@index');
+
+    Route::get('/edit/system/user/{id}','Admin\SystemUserController@edit')
+    ->name('edit.system.user')
+    ->middleware('permission:view');
+
+    Route::post('/update/system/user/{id}','Admin\SystemUserController@update')
+        ->name('update.system.user')
+        ->middleware('permission:update');
+
+    Route::get('/delete/system/user/{id}','Admin\SystemUserController@destroy')
+        ->middleware('permission:delete');
+
 });
+Route::group(['middleware'=>['role:sub-admin']],function () {
+
+    Route::get('/assign/permission', 'Admin\PermissionController@assign');
+    Route::post('/assign/permission', 'Admin\PermissionController@assignPermission')
+        ->name('assign.permission');
+    Route::post('/update/permission', 'Admin\PermissionController@updatePermission')
+        ->name('update.permission');
+    Route::get('/delete/permission/{admin_id}', 'Admin\PermissionController@deletePermission');
+
+});
+

@@ -22,7 +22,8 @@
                     </div>
                     <div class="profile_info">
                         <span>Welcome,</span>
-                        <h2>John Doe</h2>
+                        <h2>{{ auth('system_admin')->user()->role }}</h2>
+                        <h2>{{ Auth::guard('system_admin')->user()->name }}</h2>
                     </div>
                 </div>
                 <!-- /menu profile quick info -->

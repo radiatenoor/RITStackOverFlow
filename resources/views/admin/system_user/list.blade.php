@@ -45,8 +45,18 @@
                              <td>{{ $row->role }}</td>
                              <td>{{ $row->created_at }}</td>
                              <td>
-                                 <a href="{{ route('edit.system.user',$row->id) }}" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View</a>
-                                 <button id="{{ $row->id }}" class="btn btn-danger btn-xs delete_system_user"><i class="fa fa-trash-o"></i> Delete</button>
+                                 @php
+                                     $auth_user_permissions = auth('system_admin')->user()->permissions
+                                        ->pluck('name')->toArray();
+                                     $hasViewPermission = in_array('view',$auth_user_permissions);
+                                     $hasDeletePermission = in_array('delete',$auth_user_permissions);
+                                 @endphp
+                                 @if($hasViewPermission)
+                                    <a href="{{ route('edit.system.user',$row->id) }}" class="btn btn-info btn-xs"><i class="fa fa-eye"></i> View</a>
+                                 @endif
+                                 @if($hasDeletePermission)
+                                    <button id="{{ $row->id }}" class="btn btn-danger btn-xs delete_system_user"><i class="fa fa-trash-o"></i> Delete</button>
+                                 @endif
                              </td>
                            </tr>
                        @endforeach
